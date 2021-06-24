@@ -63,7 +63,7 @@ int main(int argc, const char *argv[])
         DataFrame frame;
         frame.cameraImg = imgGray;
 
-        if(dataBuffer.size == dataBufferSize)
+        if(dataBuffer.size() == dataBufferSize)
         {
             dataBuffer.erase(begin(dataBuffer));
         }
