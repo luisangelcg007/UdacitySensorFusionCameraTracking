@@ -101,3 +101,71 @@ void detKeypointsShiTomasi(vector<cv::KeyPoint> &keypoints, cv::Mat &img, bool b
         cv::waitKey(0);
     }
 }
+
+void cornerHarris_demo( int, void* )
+void detKeypointsHarris(std::vector<cv::KeyPoint> &keypoints, cv::Mat &img, bool bVis=false)
+{
+    bool foundOverlap = false;
+    int blockSize = 2;
+    int apertureSize = 3;
+    int thresh = 200;
+    int scaledApertureSize =apertureSize * 2;
+    int response;
+    double k = 0.04;
+    double overlapThreshold = 0.0;
+    double t = (double)cv::getTickCount();
+
+    cv::Mat dst = Mat::zeros( img.size(), CV_32FC1 );
+    cv::cornerHarris(img, dst, blockSize, apertureSize, k, cv::BORDER_DEFAULT);
+    cv::Mat dst_norm, dst_norm_scaled;
+    cv::normalize( dst, dst_norm, 0, 255, cv::NORM_MINMAX, CV_32FC1, cv::Mat() );
+    cv::convertScaleAbs( dst_norm, dst_norm_scaled );
+
+    for( int i = 0; i < dst_norm.rows ; i++ )
+    {
+        for( int j = 0; j < dst_norm.cols; j++ )
+        {
+            response = (int) dst_norm.at<float>(i,j)
+            if( response > thresh )
+            {
+                cv::KeyPoint point;
+                point.pt = cv::Point2f(i, j);
+                point.size = scaledApertureSize;
+                point.response = response;
+                point.class_id = 0;
+
+                foundOverlap = false;
+
+                for (auto iterator = std::begin(keypoints); iterator != std::end(keypoints); iterator++) 
+                {
+                    if (cv::KeyPoint::overlap(point, (*iterator)) > overlapThreshold) 
+                    {
+                        foundOverlap = true;
+
+                        if (point.response > (*iterator).response) 
+                        {
+                            *iterator = point;
+                            break;
+                        }
+                    }
+                }
+
+                if (!foundOverlap) { keypoints.push_back(point); }
+            }
+        }
+    }
+
+    t = ((double)cv::getTickCount() - t) / cv::getTickFrequency();
+    if (bVis) 
+    {
+        const cv::Mat visImage{ img.clone() };
+        constexpr char windowName[]{ "Harris Detector Results" };
+
+        cv::drawKeypoints(img, keypoints, visImage, cv::Scalar::all(-1), cv::DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
+        cv::namedWindow(windowName, 6);
+
+        imshow(windowName, visImage);
+        cv::waitKey(0);
+    }
+
+}

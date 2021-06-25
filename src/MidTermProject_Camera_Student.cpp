@@ -87,9 +87,13 @@ int main(int argc, const char *argv[])
         {
             detKeypointsShiTomasi(keypoints, imgGray, false);
         }
-        else
+        else  if (info.detectorType.compare("HARRIS") == 0) 
         {
-            //...
+            detKeypointsHarris(keypoints, imgGray, false);
+
+        } else 
+        {
+            detKeypointsModern(keypoints, imgGray, info.detectorType, false);
         }
         //// EOF STUDENT ASSIGNMENT
 
