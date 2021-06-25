@@ -116,9 +116,6 @@ int main(int argc, const char *argv[])
             }
 
             keypoints = retainedPoints;
-
-            info.pointsLeftOnImg.at(imgIndex) = keypoints.size();
-            std::cout << std::endl;
         }
 
         //// EOF STUDENT ASSIGNMENT
