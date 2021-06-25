@@ -105,7 +105,20 @@ int main(int argc, const char *argv[])
         cv::Rect vehicleRect(535, 180, 180, 150);
         if (bFocusOnVehicle)
         {
-            // ...
+            std::vector<cv::KeyPoint> retainedPoints;
+
+            for (auto point : keypoints) 
+            {
+                if (vehicleRect.contains(cv::Point2f(point.pt))) 
+                {
+                    retainedPoints.push_back(point); 
+                }
+            }
+
+            keypoints = retainedPoints;
+
+            info.pointsLeftOnImg.at(imgIndex) = keypoints.size();
+            std::cout << std::endl;
         }
 
         //// EOF STUDENT ASSIGNMENT
