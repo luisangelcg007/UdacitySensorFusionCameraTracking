@@ -93,7 +93,7 @@ int main(int argc, const char *argv[])
 
         } else 
         {
-            //detKeypointsModern(keypoints, imgGray, detectorType, false);
+            detKeypointsModern(keypoints, imgGray, detectorType, false);
         }
         //// EOF STUDENT ASSIGNMENT
 

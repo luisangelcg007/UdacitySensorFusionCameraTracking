@@ -168,3 +168,46 @@ void detKeypointsHarris(std::vector<cv::KeyPoint> &keypoints, cv::Mat &img, bool
     }
 
 }
+
+void detKeypointsModern(std::vector<cv::KeyPoint> &keypoints, cv::Mat &img, std::string detectorType, bool bVis=false)
+{
+    double t;
+    cv::Ptr<cv::FeatureDetector> detector;
+
+    if (detectorType.compare("FAST") == 0) 
+    {
+        // TYPE_9_16, TYPE_7_12, TYPE_5_8
+        cv::FastFeatureDetector::DetectorType type = cv::FastFeatureDetector::TYPE_9_16;
+        detector = cv::FastFeatureDetector::create(30, true, type);
+
+    } else if (detectorType.compare("BRISK") == 0) 
+    {
+        detector = cv::BRISK::create();
+
+    } else if (detectorType.compare("ORB") == 0) 
+    {
+        detector = cv::ORB::create();
+
+    } else if (detectorType.compare("AKAZE") == 0) 
+    {
+        detector = cv::AKAZE::create();
+
+    } else if (detectorType.compare("SIFT") == 0) 
+    {
+        detector = cv::xfeatures2d::SIFT::create();
+
+    }
+
+    t = static_cast<double>(cv::getTickCount());
+    detector->detect(img, keypoints);
+    t = (static_cast<double>(cv::getTickCount()) - t) / cv::getTickFrequency();
+
+    if (bVis) {
+        const std::string windowName(detectorType + " detection results.");
+        cv::Mat visImage{ img.clone() };
+        cv::drawKeypoints(img, keypoints, visImage, cv::Scalar::all(-1), cv::DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
+        cv::namedWindow(windowName, 5);
+        imshow(windowName, visImage);
+        cv::waitKey(0);
+    }
+}
