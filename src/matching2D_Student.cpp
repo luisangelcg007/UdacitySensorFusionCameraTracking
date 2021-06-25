@@ -102,7 +102,7 @@ void detKeypointsShiTomasi(vector<cv::KeyPoint> &keypoints, cv::Mat &img, bool b
     }
 }
 
-void detKeypointsHarris(std::vector<cv::KeyPoint> &keypoints, cv::Mat &img, bool bVis=false)
+void detKeypointsHarris(std::vector<cv::KeyPoint> &keypoints, cv::Mat &img, bool bVis)
 {
     bool foundOverlap = false;
     int blockSize = 2;
@@ -114,7 +114,7 @@ void detKeypointsHarris(std::vector<cv::KeyPoint> &keypoints, cv::Mat &img, bool
     double overlapThreshold = 0.0;
     double t = (double)cv::getTickCount();
 
-    cv::Mat dst = Mat::zeros( img.size(), CV_32FC1 );
+    cv::Mat dst = cv::Mat::zeros( img.size(), CV_32FC1 );
     cv::cornerHarris(img, dst, blockSize, apertureSize, k, cv::BORDER_DEFAULT);
     cv::Mat dst_norm, dst_norm_scaled;
     cv::normalize( dst, dst_norm, 0, 255, cv::NORM_MINMAX, CV_32FC1, cv::Mat() );
@@ -124,7 +124,7 @@ void detKeypointsHarris(std::vector<cv::KeyPoint> &keypoints, cv::Mat &img, bool
     {
         for( int j = 0; j < dst_norm.cols; j++ )
         {
-            response = (int) dst_norm.at<float>(i,j)
+            response = (int) dst_norm.at<float>(i,j);
             if( response > thresh )
             {
                 cv::KeyPoint point;
