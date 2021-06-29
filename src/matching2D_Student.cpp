@@ -10,6 +10,8 @@ void matchDescriptors(std::vector<cv::KeyPoint> &kPtsSource, std::vector<cv::Key
     // configure matcher
     bool crossCheck = false;
     cv::Ptr<cv::DescriptorMatcher> matcher;
+    // configure matcher
+    double t;
 
     if (matcherType.compare("MAT_BF") == 0)
     {
