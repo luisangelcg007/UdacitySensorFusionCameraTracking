@@ -15,22 +15,46 @@ void matchDescriptors(std::vector<cv::KeyPoint> &kPtsSource, std::vector<cv::Key
     {
         int normType = cv::NORM_HAMMING;
         matcher = cv::BFMatcher::create(normType, crossCheck);
+        std::cout << "BF matching cross-check = " << crossCheck << std::endl;
     }
     else if (matcherType.compare("MAT_FLANN") == 0)
     {
-        // ...
+        if (descRef.type() != CV_32F) 
+        { 
+            descRef.convertTo(descRef, CV_32F); 
+        }
+        if (descSource.type() != CV_32F) 
+        { 
+            descSource.convertTo(descSource, CV_32F); 
+        }
+
+        matcher = cv::DescriptorMatcher::create(cv::DescriptorMatcher::FLANNBASED);
+        std::cout << "FLANN matching" << std::endl;
     }
 
     // perform matching task
     if (selectorType.compare("SEL_NN") == 0)
     { // nearest neighbor (best match)
-
+        
+        t = static_cast<double>(cv::getTickCount());
         matcher->match(descSource, descRef, matches); // Finds the best match for each descriptor in desc1
+        t = ((static_cast<double>(cv::getTickCount())) - t) / cv::getTickFrequency();
     }
     else if (selectorType.compare("SEL_KNN") == 0)
     { // k nearest neighbors (k=2)
+        std::vector<std::vector<cv::DMatch>> knnMatches;
 
-        // ...
+        t = static_cast<double>(cv::getTickCount());
+        matcher->knnMatch(descSource, descRef, knnMatches, 2);
+        constexpr float threshold{ 0.8 };
+
+        for (auto iterator{ std::begin(knnMatches) }; iterator != std::end(knnMatches); iterator++) {
+            if ((*iterator).at(0).distance < (threshold * (*iterator).at(1).distance)) {
+                matches.push_back((*iterator).at(0));
+            }
+        }
+
+        t = ((static_cast<double>(cv::getTickCount())) - t) / cv::getTickFrequency();
     }
 }
 
@@ -47,11 +71,22 @@ void descKeypoints(vector<cv::KeyPoint> &keypoints, cv::Mat &img, cv::Mat &descr
         float patternScale = 1.0f; // apply this scale to the pattern used for sampling the neighbourhood of a keypoint.
 
         extractor = cv::BRISK::create(threshold, octaves, patternScale);
-    }
-    else
-    {
 
-        //...
+    } else if (descriptorType.compare("ORB") == 0) {
+        extractor = cv::ORB::create();
+
+    } else if (descriptorType.compare("FREAK") == 0) {
+        extractor = cv::xfeatures2d::FREAK::create();
+
+    } else if (descriptorType.compare("AKAZE") == 0) {
+        extractor = cv::AKAZE::create();
+
+    } else if (descriptorType.compare("SIFT") == 0) {
+        extractor = cv::xfeatures2d::SIFT::create();
+
+    } else if (descriptorType.compare("BRIEF") == 0) {
+        extractor = cv::xfeatures2d::BriefDescriptorExtractor::create();
+
     }
 
     // perform feature description
