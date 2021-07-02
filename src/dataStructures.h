@@ -24,11 +24,7 @@ struct TimingInfo {
     TimingInfo() {}
 
     TimingInfo(const std::string detType, const std::string descType, const std::string matchType, const std::string selType)
-    {
-        detectorType(detType);
-        descriptorType(descType);
-        matcherType(matchType);
-        selectorType(selType);
+        : detectorType(detType), descriptorType(descType), matcherType(matchType), selectorType(selType) {
     }
 };
 
