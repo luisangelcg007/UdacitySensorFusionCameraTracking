@@ -23,18 +23,28 @@ CollectedData matchDescriptors(std::vector<cv::KeyPoint> &kPtsSource, std::vecto
         int normType = cv::NORM_HAMMING;
         matcher = cv::BFMatcher::create(normType, crossCheck);
         std::cout << "BF matching cross-check = " << crossCheck << std::endl;
+
+        if (descRef.type() != CV_8U) 
+        { 
+            std::cout << "Paso A " << std::endl;
+            descRef.convertTo(descRef, CV_8U); 
+        }
+        if (descSource.type() != CV_8U) 
+        { 
+            std::cout << "Paso B " << std::endl;
+            descSource.convertTo(descSource, CV_8U);
+        }
     }
     else if (matcherType.compare("MAT_FLANN") == 0)
     {
-        /*if (descRef.type() != CV_32F) 
+        if (descRef.type() != CV_32F) 
         { 
             descRef.convertTo(descRef, CV_32F); 
-        }*/
+        }
         if (descSource.type() != CV_32F) 
         { 
             std::cout << "Paso 0 " << std::endl;
             descSource.convertTo(descSource, CV_32F);
-            descRef.convertTo(descRef, CV_32F);
         }
 
         matcher = cv::DescriptorMatcher::create(cv::DescriptorMatcher::FLANNBASED);
