@@ -64,7 +64,7 @@ CollectedData matchDescriptors(std::vector<cv::KeyPoint> &kPtsSource, std::vecto
         t = ((static_cast<double>(cv::getTickCount())) - t) / cv::getTickFrequency();
     }
 
-    return CollectedData{ (int)(keypoints.size()), secondsToMilliseconds(t) };
+    return CollectedData{ (int)(matches.size()), secondsToMilliseconds(t) };
 }
 
 // Use one of several types of state-of-art descriptors to uniquely identify keypoints
