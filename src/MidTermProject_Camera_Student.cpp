@@ -161,6 +161,7 @@ int main(int argc, const char *argv[])
 
             //// EOF STUDENT ASSIGNMENT
             cout << "#1 : LOAD IMAGE INTO BUFFER done" << endl;
+            std::cout << "imgIndex := " << imgIndex << std::endl;
 
             /* DETECT IMAGE KEYPOINTS */
 
@@ -259,6 +260,8 @@ int main(int argc, const char *argv[])
 
                 vector<cv::DMatch> matches;
                 const std::string descriptorFamily{ (info.descriptorType.compare("SIFT") == 0) ? "DES_HOG" : "DES_BINARY" };
+                std::cout << "descriptorFamily = " << descriptorFamily << std::endl;
+                std::cout << "descriptorType = " << info.descriptorType << std::endl;
                 // string matcherType = "MAT_BF";        // MAT_BF, MAT_FLANN
                 // string descriptorType = "DES_BINARY"; // DES_BINARY, DES_HOG
                 // string selectorType = "SEL_NN";       // SEL_NN, SEL_KNN
