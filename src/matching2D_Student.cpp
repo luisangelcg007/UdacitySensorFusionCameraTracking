@@ -26,13 +26,15 @@ CollectedData matchDescriptors(std::vector<cv::KeyPoint> &kPtsSource, std::vecto
     }
     else if (matcherType.compare("MAT_FLANN") == 0)
     {
-        if (descRef.type() != CV_32F) 
+        /*if (descRef.type() != CV_32F) 
         { 
             descRef.convertTo(descRef, CV_32F); 
-        }
+        }*/
         if (descSource.type() != CV_32F) 
         { 
-            descSource.convertTo(descSource, CV_32F); 
+            std::cout << "Paso 0 " << std::endl;
+            descSource.convertTo(descSource, CV_32F);
+            descRef.convertTo(descRef, CV_32F);
         }
 
         matcher = cv::DescriptorMatcher::create(cv::DescriptorMatcher::FLANNBASED);
