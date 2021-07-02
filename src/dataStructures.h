@@ -34,17 +34,9 @@ struct CollectedData
     double elapsedTime;
 
     // constructors
-    CollectedData()
-    {
-         numKeyPoints = 0;
-         elapsedTime = 0;
-    }
+    CollectedData() : numKeyPoints(0), elapsedTime(0.0) {}
 
-    CollectedData(int points, double time) 
-    {
-         numKeyPoints = points;
-         elapsedTime = time;
-    }
+    CollectedData(int points, double time) : numKeyPoints(points), elapsedTime(time) {}
 };
 
 #endif /* dataStructures_h */

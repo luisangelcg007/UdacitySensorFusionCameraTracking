@@ -42,19 +42,27 @@ CollectedData matchDescriptors(std::vector<cv::KeyPoint> &kPtsSource, std::vecto
     // perform matching task
     if (selectorType.compare("SEL_NN") == 0)
     { // nearest neighbor (best match)
-        
+        std::cout << "Paso 1 " << std::endl;
         t = static_cast<double>(cv::getTickCount());
         matcher->match(descSource, descRef, matches); // Finds the best match for each descriptor in desc1
         t = ((static_cast<double>(cv::getTickCount())) - t) / cv::getTickFrequency();
     }
     else if (selectorType.compare("SEL_KNN") == 0)
     { // k nearest neighbors (k=2)
+
+        std::cout << "Paso 2 " << std::endl;
         std::vector<std::vector<cv::DMatch>> knnMatches;
 
+        std::cout << "Paso 3 " << std::endl;
         t = static_cast<double>(cv::getTickCount());
+
+        std::cout << "Paso 4 " << std::endl;
         matcher->knnMatch(descSource, descRef, knnMatches, 2);
+
+        std::cout << "Paso 5 " << std::endl;
         constexpr float threshold{ 0.8 };
 
+        std::cout << "Paso 6 " << std::endl;
         for (auto iterator{ std::begin(knnMatches) }; iterator != std::end(knnMatches); iterator++) {
             if ((*iterator).at(0).distance < (threshold * (*iterator).at(1).distance)) {
                 matches.push_back((*iterator).at(0));
@@ -63,7 +71,8 @@ CollectedData matchDescriptors(std::vector<cv::KeyPoint> &kPtsSource, std::vecto
 
         t = ((static_cast<double>(cv::getTickCount())) - t) / cv::getTickFrequency();
     }
-
+    
+        std::cout << "Paso 5 " << std::endl;
     return CollectedData{ (int)(matches.size()), secondsToMilliseconds(t) };
 }
 

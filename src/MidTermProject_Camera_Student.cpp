@@ -25,7 +25,7 @@ bool isValidDescriptorDetectorCombo(const std::string descriptor, const std::str
 }
 
 std::vector<TimingInfo> initializeTimingInfoVector(void) {
-    const std::vector<std::string> detectorTypes{ "SHITOMASI", "HARRIS", "FAST", "BRISK", "ORB", "AKAZE",  "SIFT" };
+    const std::vector<std::string> detectorTypes{ "SHITOMASI", "HARRIS", "FAST", "BRISK", "ORB", "AKAZE", "SIFT" };
     const std::vector<std::string> descriptorTypes{ "BRISK", "BRIEF", "ORB", "FREAK", "AKAZE", "SIFT" };
     const std::vector<std::string> matcherTypes{ "MAT_BF" };
     const std::vector<std::string> selectorTypes{ "SEL_KNN" };
@@ -55,12 +55,12 @@ std::vector<TimingInfo> initializeTimingInfoVector(void) {
 void createCSVOutputFile(std::vector<TimingInfo> &timingInfo) 
 {
     constexpr char COMMA[]{ ", " };
-    constexpr char csvName[]{ "../report/Brandon_Marlowe_Midterm_Project.csv" };
+    constexpr char csvName[]{ "../report/LuisAngelCabralGuzmanProject.csv" };
 
     std::cout << "Writing output file: " << csvName << std::endl;
     std::ofstream csvStream{ csvName };
 
-    csvStream << "Name: Brandon Marlowe" << std::endl << "Date: 2019-09-16" << std::endl << std::endl;
+    csvStream << "Name: Luis Angel Cabral Guzman" << std::endl << "Date: 2021-06-01" << std::endl << std::endl;
 
     csvStream << "IMAGE NO." << COMMA;
     csvStream << "DETECTOR TYPE" << COMMA;
@@ -128,6 +128,13 @@ int main(int argc, const char *argv[])
         {
             /* LOAD IMAGE INTO BUFFER */
             CollectedData collectedData;
+
+            std::cout << "Detector type:= " << info.detectorType << std::endl;
+            std::cout << "Descriptor type:= " << info.descriptorType << std::endl;
+            std::cout << "Matcher type:= " << info.matcherType << std::endl;
+            std::cout << "Selector type:= " << info.selectorType << std::endl;
+            std::cout << std::endl;
+
             // assemble filenames for current index
             ostringstream imgNumber;
             imgNumber << setfill('0') << setw(imgFillWidth) << imgStartIndex + imgIndex;
@@ -159,7 +166,6 @@ int main(int argc, const char *argv[])
 
             // extract 2D keypoints from current image
             vector<cv::KeyPoint> keypoints; // create empty feature list for current image
-            string detectorType = "SHITOMASI";
 
             //// STUDENT ASSIGNMENT
             //// TASK MP.2 -> add the following keypoint detectors in file matching2D.cpp and enable string-based selection based on detectorType
@@ -209,7 +215,7 @@ int main(int argc, const char *argv[])
             //// EOF STUDENT ASSIGNMENT
 
             // optional : limit number of keypoints (helpful for debugging and learning)
-            bool bLimitKpts = true;
+            bool bLimitKpts = false;
             if (bLimitKpts)
             {
                 int maxKeypoints = 50;
@@ -233,8 +239,11 @@ int main(int argc, const char *argv[])
             //// -> BRIEF, ORB, FREAK, AKAZE, SIFT
 
             cv::Mat descriptors;
-            string descriptorType = "BRISK"; // BRIEF, ORB, FREAK, AKAZE, SIFT
-            collectedData = descKeypoints((dataBuffer.end() - 1)->keypoints, (dataBuffer.end() - 1)->cameraImg, descriptors, info.descriptorType);
+            // descriptorType = "BRISK"; // BRIEF, ORB, FREAK, AKAZE, SIFT
+            collectedData = descKeypoints((dataBuffer.end() - 1)->keypoints, 
+                                          (dataBuffer.end() - 1)->cameraImg, 
+                                           descriptors, 
+                                           info.descriptorType);
 
             info.descElapsedTime.at(imgIndex) = collectedData.elapsedTime;
             //// EOF STUDENT ASSIGNMENT
@@ -246,7 +255,6 @@ int main(int argc, const char *argv[])
 
             if (dataBuffer.size() > 1) // wait until at least two images have been processed
             {
-
                 /* MATCH KEYPOINT DESCRIPTORS */
 
                 vector<cv::DMatch> matches;
@@ -261,13 +269,12 @@ int main(int argc, const char *argv[])
 
                 collectedData = matchDescriptors((dataBuffer.end() - 2)->keypoints, 
                                                 (dataBuffer.end() - 1)->keypoints,
-                                                (dataBuffer.end() - 2)->descriptors, (dataBuffer.end() - 1)->descriptors,
+                                                (dataBuffer.end() - 2)->descriptors, 
+                                                (dataBuffer.end() - 1)->descriptors,
                                                 matches, 
                                                 descriptorFamily, 
                                                 info.matcherType, 
                                                 info.selectorType);
-
-                
 
                 info.matchedPts.at(imgIndex) = collectedData.numKeyPoints;
                 info.matchElapsedTime.at(imgIndex) = collectedData.elapsedTime;
@@ -280,7 +287,7 @@ int main(int argc, const char *argv[])
                 cout << "#4 : MATCH KEYPOINT DESCRIPTORS done" << endl;
 
                 // visualize matches between current and previous image
-                bVis = true;
+                bVis = false;
                 if (bVis)
                 {
                     cv::Mat matchImg = ((dataBuffer.end() - 1)->cameraImg).clone();
