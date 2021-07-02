@@ -178,8 +178,8 @@ int main(int argc, const char *argv[])
                 collectedData = detKeypointsModern(keypoints, imgGray, info.detectorType, false);
             }
 
-            info.ptsPerFrame.at(imgIndex) = data.numKeyPoints;
-            info.detElapsedTime.at(imgIndex) = data.elapsedTime;
+            info.ptsPerFrame.at(imgIndex) = collectedData.numKeyPoints;
+            info.detElapsedTime.at(imgIndex) = collectedData.elapsedTime;
             //// EOF STUDENT ASSIGNMENT
 
             //// STUDENT ASSIGNMENT
@@ -236,7 +236,7 @@ int main(int argc, const char *argv[])
             string descriptorType = "BRISK"; // BRIEF, ORB, FREAK, AKAZE, SIFT
             collectedData = descKeypoints((dataBuffer.end() - 1)->keypoints, (dataBuffer.end() - 1)->cameraImg, descriptors, info.descriptorType);
 
-            info.descElapsedTime.at(imgIndex) = data.elapsedTime;
+            info.descElapsedTime.at(imgIndex) = collectedData.elapsedTime;
             //// EOF STUDENT ASSIGNMENT
 
             // push descriptors for current frame to end of data buffer
@@ -269,8 +269,8 @@ int main(int argc, const char *argv[])
 
                 
 
-                info.matchedPts.at(imgIndex) = data.numKeyPoints;
-                info.matchElapsedTime.at(imgIndex) = data.elapsedTime;
+                info.matchedPts.at(imgIndex) = collectedData.numKeyPoints;
+                info.matchElapsedTime.at(imgIndex) = collectedData.elapsedTime;
 
                 //// EOF STUDENT ASSIGNMENT
 
