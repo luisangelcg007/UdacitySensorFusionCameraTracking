@@ -4,7 +4,7 @@ My top3 detector/descriptor are:
 2,. Fast detector / ORB descriptor
 3.- Fas detector / Brisk descriptor
 
-<<these top 3 are in base of detector time and descriptor time thet for all cases is 
+These top 3 are in base of detector time and descriptor time that for all cases is 
 not more than 3 secods, other important point is the matched keyPoints number, 
-for those detector/ descriptor combination the matched points are aroun 100, 
+for those detector/ descriptor combination the matched points are around 100, 
 I think they are enough, and the matcher time is close to 1 second.
