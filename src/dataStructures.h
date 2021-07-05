@@ -14,18 +14,22 @@ struct DataFrame { // represents the available sensor information at the same ti
     std::vector<cv::DMatch> kptMatches; // keypoint matches between previous and current frame
 };
 
-struct TimingInfo {
+struct TimeInformation {
     const std::string detectorType, descriptorType, matcherType, selectorType;
 
-    std::array<int, 10> ptsPerFrame, pointsLeftOnImg, matchedPts;
-    std::array<double, 10> detElapsedTime, descElapsedTime, matchElapsedTime;
+    std::array<int, 10> pointsPerFrame;
+    std::array<int, 10> pointsLeftOnImage;
+    std::array<int, 10> matchedPoints;
+    std::array<double, 10> detectorElapsedTime;
+    std::array<double, 10> descriptorElapsedTime;
+    std::array<double, 10> matchElapsedTime;
 
     // constructors
-    TimingInfo() {}
+    TimeInformation() {}
 
-    TimingInfo(const std::string detType, const std::string descType, const std::string matchType, const std::string selType)
-        : detectorType(detType), descriptorType(descType), matcherType(matchType), selectorType(selType) {
-    }
+    TimeInformation(const std::string detType, const std::string descType, const std::string matchType, const std::string selType)
+        : detectorType(detType), descriptorType(descType), matcherType(matchType), selectorType(selType) 
+        {}
 };
 
 struct CollectedData 
@@ -34,9 +38,11 @@ struct CollectedData
     double elapsedTime;
 
     // constructors
-    CollectedData() : numKeyPoints(0), elapsedTime(0.0) {}
+    CollectedData() : numKeyPoints(0), elapsedTime(0.0) 
+    {}
 
-    CollectedData(int points, double time) : numKeyPoints(points), elapsedTime(time) {}
+    CollectedData(int points, double time) : numKeyPoints(points), elapsedTime(time) 
+    {}
 };
 
 #endif /* dataStructures_h */

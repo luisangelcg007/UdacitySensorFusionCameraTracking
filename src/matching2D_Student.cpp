@@ -9,8 +9,13 @@ double secondsToMilliseconds(const double seconds)
 using namespace std;
 
 // Find best matches for keypoints in two camera images based on several matching methods
-CollectedData matchDescriptors(std::vector<cv::KeyPoint> &kPtsSource, std::vector<cv::KeyPoint> &kPtsRef, cv::Mat &descSource, cv::Mat &descRef,
-                      std::vector<cv::DMatch> &matches, std::string descriptorType, std::string matcherType, std::string selectorType)
+CollectedData matchDescriptors( std::vector<cv::KeyPoint> &kPtsSource, 
+                                std::vector<cv::KeyPoint> &kPtsRef, 
+                                cv::Mat &descSource, cv::Mat &descRef,
+                                std::vector<cv::DMatch> &matches, 
+                                std::string descriptorType, 
+                                std::string matcherType,
+                                std::string selectorType)
 {
     // configure matcher
     bool crossCheck = false;
@@ -104,26 +109,46 @@ CollectedData descKeypoints(vector<cv::KeyPoint> &keypoints, cv::Mat &img, cv::M
 
         extractor = cv::BRISK::create(threshold, octaves, patternScale);
 
-    } else if (descriptorType.compare("ORB") == 0) 
+    } 
+    else
     {
-        extractor = cv::ORB::create();
-
-    } else if (descriptorType.compare("FREAK") == 0) 
-    {
-        extractor = cv::xfeatures2d::FREAK::create();
-
-    } else if (descriptorType.compare("AKAZE") == 0) 
-    {
-        extractor = cv::AKAZE::create();
-
-    } else if (descriptorType.compare("SIFT") == 0) 
-    {
-        extractor = cv::xfeatures2d::SIFT::create();
-
-    } else if (descriptorType.compare("BRIEF") == 0) 
-    {
-        extractor = cv::xfeatures2d::BriefDescriptorExtractor::create();
-
+        if (descriptorType.compare("ORB") == 0) 
+        {
+            extractor = cv::ORB::create();
+        } 
+        else
+        {
+            if (descriptorType.compare("FREAK") == 0) 
+            {
+                extractor = cv::xfeatures2d::FREAK::create();
+            } 
+            else
+            {
+                if (descriptorType.compare("AKAZE") == 0) 
+                {
+                    extractor = cv::AKAZE::create();
+                } 
+                else
+                {
+                    if (descriptorType.compare("SIFT") == 0) 
+                    {
+                        extractor = cv::xfeatures2d::SIFT::create();
+                    } 
+                    else
+                    {
+                        if (descriptorType.compare("BRIEF") == 0) 
+                        {
+                            extractor = cv::xfeatures2d::BriefDescriptorExtractor::create();
+                        }
+                        else
+                        {
+                            /* code */
+                        }
+                        
+                    }
+                }
+            }
+        }
     }
 
     // perform feature description
@@ -256,22 +281,39 @@ CollectedData detKeypointsModern(std::vector<cv::KeyPoint> &keypoints, cv::Mat &
         cv::FastFeatureDetector::DetectorType type = cv::FastFeatureDetector::TYPE_9_16;
         detector = cv::FastFeatureDetector::create(30, true, type);
 
-    } else if (detectorType.compare("BRISK") == 0) 
+    }
+    else 
     {
-        detector = cv::BRISK::create();
+        if (detectorType.compare("BRISK") == 0) 
+        {
+            detector = cv::BRISK::create();
+        } 
+        else 
+        {
+            if (detectorType.compare("ORB") == 0) 
+            {
+                detector = cv::ORB::create();
+            } 
+            else
+            {
+                if (detectorType.compare("AKAZE") == 0) 
+                {
+                    detector = cv::AKAZE::create();
 
-    } else if (detectorType.compare("ORB") == 0) 
-    {
-        detector = cv::ORB::create();
-
-    } else if (detectorType.compare("AKAZE") == 0) 
-    {
-        detector = cv::AKAZE::create();
-
-    } else if (detectorType.compare("SIFT") == 0) 
-    {
-        detector = cv::xfeatures2d::SIFT::create();
-
+                } 
+                else  
+                {
+                    if (detectorType.compare("SIFT") == 0)
+                    {
+                        detector = cv::xfeatures2d::SIFT::create();
+                    }
+                    else
+                    {
+                        {/* code */}
+                    }
+                }
+            }
+        }
     }
 
     t = static_cast<double>(cv::getTickCount());

@@ -24,13 +24,13 @@ bool isValidDescriptorDetectorCombo(const std::string descriptor, const std::str
             (descriptor.compare("ORB") == 0 && detector.compare("SIFT") == 0));
 }
 
-std::vector<TimingInfo> initializeTimingInfoVector(void) {
+std::vector<TimeInformation> initializeTimeInformationVector(void) {
     const std::vector<std::string> detectorTypes{ "SHITOMASI", "HARRIS", "FAST", "BRISK", "ORB", "AKAZE", "SIFT" };
     const std::vector<std::string> descriptorTypes{ "BRISK", "BRIEF", "ORB", "FREAK", "AKAZE", "SIFT" };
     const std::vector<std::string> matcherTypes{ "MAT_BF" };
     const std::vector<std::string> selectorTypes{ "SEL_KNN" };
 
-    std::vector<TimingInfo> info;
+    std::vector<TimeInformation> info;
 
     for (auto detectorType : detectorTypes) 
     {
@@ -43,7 +43,7 @@ std::vector<TimingInfo> initializeTimingInfoVector(void) {
 
                     if (!isValidDescriptorDetectorCombo(descriptorType, detectorType)) { continue; }
 
-                    info.push_back(TimingInfo(detectorType, descriptorType, matcherType, selectorType));
+                    info.push_back(TimeInformation(detectorType, descriptorType, matcherType, selectorType));
                 }
             }
         }
@@ -52,7 +52,7 @@ std::vector<TimingInfo> initializeTimingInfoVector(void) {
     return info;
 }
 
-void createCSVOutputFile(std::vector<TimingInfo> &timingInfo) 
+void createCSVOutputFile(std::vector<TimeInformation> &timeInformation) 
 {
     constexpr char COMMA[]{ ", " };
     constexpr char csvName[]{ "../report/LuisAngelCabralGuzmanProject.csv" };
@@ -60,7 +60,7 @@ void createCSVOutputFile(std::vector<TimingInfo> &timingInfo)
     std::cout << "Writing output file: " << csvName << std::endl;
     std::ofstream csvStream{ csvName };
 
-    csvStream << "Name: Luis Angel Cabral Guzman" << std::endl << "Date: 2021-06-01" << std::endl << std::endl;
+    csvStream << "Name: Luis Angel Cabral Guzman" << std::endl << "Date: 2021-07-05" << std::endl << std::endl;
 
     csvStream << "COMBINATION ID." << COMMA;
     csvStream << "IMAGE NO." << COMMA;
@@ -76,7 +76,7 @@ void createCSVOutputFile(std::vector<TimingInfo> &timingInfo)
 
     int indexID = 1;
 
-    for (auto &info : timingInfo) 
+    for (auto &info : timeInformation) 
     {
         
         for (int index = 0; index < 10; index++) 
@@ -85,11 +85,11 @@ void createCSVOutputFile(std::vector<TimingInfo> &timingInfo)
             csvStream << index << COMMA;
             csvStream << info.detectorType << COMMA;
             csvStream << info.descriptorType << COMMA;
-            csvStream << info.ptsPerFrame.at(index) << COMMA;
-            csvStream << info.pointsLeftOnImg.at(index) << COMMA;
-            csvStream << info.detElapsedTime.at(index) << COMMA;
-            csvStream << info.descElapsedTime.at(index) << COMMA;
-            csvStream << info.matchedPts.at(index) << COMMA;
+            csvStream << info.pointsPerFrame.at(index) << COMMA;
+            csvStream << info.pointsLeftOnImage.at(index) << COMMA;
+            csvStream << info.detectorElapsedTime.at(index) << COMMA;
+            csvStream << info.descriptorElapsedTime.at(index) << COMMA;
+            csvStream << info.matchedPoints.at(index) << COMMA;
             csvStream << info.matchElapsedTime.at(index) << std::endl;
         }
         indexID++;
@@ -105,7 +105,7 @@ int main(int argc, const char *argv[])
 
     /* INIT VARIABLES AND DATA STRUCTURES */
 
-     std::vector<TimingInfo> timingInfo = initializeTimingInfoVector() ;
+     std::vector<TimeInformation> timeInformation = initializeTimeInformationVector() ;
 
     // data location
     string dataPath = "../";
@@ -125,7 +125,7 @@ int main(int argc, const char *argv[])
 
     /* MAIN LOOP OVER ALL IMAGES */
 
-    for (auto &info : timingInfo) 
+    for (auto &info : timeInformation) 
     {
         dataBuffer.clear();
 
@@ -190,8 +190,8 @@ int main(int argc, const char *argv[])
                 collectedData = detKeypointsModern(keypoints, imgGray, info.detectorType, false);
             }
 
-            info.ptsPerFrame.at(imgIndex) = collectedData.numKeyPoints;
-            info.detElapsedTime.at(imgIndex) = collectedData.elapsedTime;
+            info.pointsPerFrame.at(imgIndex) = collectedData.numKeyPoints;
+            info.detectorElapsedTime.at(imgIndex) = collectedData.elapsedTime;
             //// EOF STUDENT ASSIGNMENT
 
             //// STUDENT ASSIGNMENT
@@ -214,7 +214,7 @@ int main(int argc, const char *argv[])
 
                 keypoints = retainedPoints;
 
-                info.pointsLeftOnImg.at(imgIndex) = keypoints.size();
+                info.pointsLeftOnImage.at(imgIndex) = keypoints.size();
                 std::cout << std::endl;
             }
 
@@ -251,7 +251,7 @@ int main(int argc, const char *argv[])
                                            descriptors, 
                                            info.descriptorType);
 
-            info.descElapsedTime.at(imgIndex) = collectedData.elapsedTime;
+            info.descriptorElapsedTime.at(imgIndex) = collectedData.elapsedTime;
             //// EOF STUDENT ASSIGNMENT
 
             // push descriptors for current frame to end of data buffer
@@ -284,7 +284,7 @@ int main(int argc, const char *argv[])
                                                 info.matcherType, 
                                                 info.selectorType);
 
-                info.matchedPts.at(imgIndex) = collectedData.numKeyPoints;
+                info.matchedPoints.at(imgIndex) = collectedData.numKeyPoints;
                 info.matchElapsedTime.at(imgIndex) = collectedData.elapsedTime;
 
                 //// EOF STUDENT ASSIGNMENT
@@ -315,12 +315,12 @@ int main(int argc, const char *argv[])
             }
             else 
             {
-                info.matchedPts.at(imgIndex) = info.matchElapsedTime.at(imgIndex) = 0;
+                info.matchedPoints.at(imgIndex) = info.matchElapsedTime.at(imgIndex) = 0;
             }
 
         } // eof loop over all images
     }
-    createCSVOutputFile(timingInfo);
+    createCSVOutputFile(timeInformation);
 
     return 0;
 }
