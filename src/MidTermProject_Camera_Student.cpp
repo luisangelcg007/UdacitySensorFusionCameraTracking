@@ -62,6 +62,7 @@ void createCSVOutputFile(std::vector<TimingInfo> &timingInfo)
 
     csvStream << "Name: Luis Angel Cabral Guzman" << std::endl << "Date: 2021-06-01" << std::endl << std::endl;
 
+    csvStream << "COMBINATION ID." << COMMA;
     csvStream << "IMAGE NO." << COMMA;
     csvStream << "DETECTOR TYPE" << COMMA;
     csvStream << "DESCRIPTOR TYPE" << COMMA;
@@ -73,10 +74,14 @@ void createCSVOutputFile(std::vector<TimingInfo> &timingInfo)
     csvStream << "MATCHER ELAPSED TIME";
     csvStream << std::endl;
 
+    int indexID = 1;
+
     for (auto &info : timingInfo) 
     {
-        for (int index{ 0 }; index < 10; index++) 
+        
+        for (int index = 0; index < 10; index++) 
         {
+            csvStream << indexID << COMMA;
             csvStream << index << COMMA;
             csvStream << info.detectorType << COMMA;
             csvStream << info.descriptorType << COMMA;
@@ -87,7 +92,7 @@ void createCSVOutputFile(std::vector<TimingInfo> &timingInfo)
             csvStream << info.matchedPts.at(index) << COMMA;
             csvStream << info.matchElapsedTime.at(index) << std::endl;
         }
-
+        indexID++;
         csvStream << std::endl;
     }
 
