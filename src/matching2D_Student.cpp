@@ -75,8 +75,10 @@ CollectedData matchDescriptors(std::vector<cv::KeyPoint> &kPtsSource, std::vecto
         constexpr float threshold{ 0.8 };
 
         std::cout << "Paso 6 " << std::endl;
-        for (auto iterator{ std::begin(knnMatches) }; iterator != std::end(knnMatches); iterator++) {
-            if ((*iterator).at(0).distance < (threshold * (*iterator).at(1).distance)) {
+        for (auto iterator{ std::begin(knnMatches) }; iterator != std::end(knnMatches); iterator++) 
+        {
+            if ((*iterator).at(0).distance < (threshold * (*iterator).at(1).distance)) 
+            {
                 matches.push_back((*iterator).at(0));
             }
         }
@@ -102,19 +104,24 @@ CollectedData descKeypoints(vector<cv::KeyPoint> &keypoints, cv::Mat &img, cv::M
 
         extractor = cv::BRISK::create(threshold, octaves, patternScale);
 
-    } else if (descriptorType.compare("ORB") == 0) {
+    } else if (descriptorType.compare("ORB") == 0) 
+    {
         extractor = cv::ORB::create();
 
-    } else if (descriptorType.compare("FREAK") == 0) {
+    } else if (descriptorType.compare("FREAK") == 0) 
+    {
         extractor = cv::xfeatures2d::FREAK::create();
 
-    } else if (descriptorType.compare("AKAZE") == 0) {
+    } else if (descriptorType.compare("AKAZE") == 0) 
+    {
         extractor = cv::AKAZE::create();
 
-    } else if (descriptorType.compare("SIFT") == 0) {
+    } else if (descriptorType.compare("SIFT") == 0) 
+    {
         extractor = cv::xfeatures2d::SIFT::create();
 
-    } else if (descriptorType.compare("BRIEF") == 0) {
+    } else if (descriptorType.compare("BRIEF") == 0) 
+    {
         extractor = cv::xfeatures2d::BriefDescriptorExtractor::create();
 
     }
@@ -271,7 +278,8 @@ CollectedData detKeypointsModern(std::vector<cv::KeyPoint> &keypoints, cv::Mat &
     detector->detect(img, keypoints);
     t = (static_cast<double>(cv::getTickCount()) - t) / cv::getTickFrequency();
 
-    if (bVis) {
+    if (bVis) 
+    {
         const std::string windowName(detectorType + " detection results.");
         cv::Mat visImage{ img.clone() };
         cv::drawKeypoints(img, keypoints, visImage, cv::Scalar::all(-1), cv::DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
