@@ -15,7 +15,7 @@ struct DataFrame { // represents the available sensor information at the same ti
 };
 
 struct TimeInformation {
-    const std::string detectorType, descriptorType, matcherType, selectorType;
+    std::string detectorType, descriptorType, matcherType, selectorType;
 
     std::array<int, 10> pointsPerFrame;
     std::array<int, 10> pointsLeftOnImage;
