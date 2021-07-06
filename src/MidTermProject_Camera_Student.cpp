@@ -92,10 +92,11 @@ int main(int argc, const char *argv[])
                 for (int selectorTypeIndex = 0; selectorTypeIndex < matcherTypes.size(); selectorTypeIndex++ ) 
                 {
                     if (!isValidDescriptorDetectorCombo(descriptorTypes[descriptorTypeIndex], detectorTypes[detectorTypeIndex])) { continue; }
-                    timeInformation.push_back(detectorTypes[detectorTypeIndex], 
+                    timeInformation.push_back(
+                        TimeInformation(detectorTypes[detectorTypeIndex], 
                                         descriptorTypes[descriptorTypeIndex], 
                                         matcherTypes[matcherTypeIndex], 
-                                        selectorTypes[matcherTypeIndex]);
+                                        selectorTypes[matcherTypeIndex]));
                 }
             }
         }
