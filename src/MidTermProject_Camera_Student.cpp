@@ -97,10 +97,12 @@ int main(int argc, const char *argv[])
                                         descriptorTypes[descriptorTypeIndex], 
                                         matcherTypes[matcherTypeIndex], 
                                         selectorTypes[matcherTypeIndex]));*/
+                    timeInformation.push_back(
                     timeInformation.detectorType = detectorTypes[detectorTypeIndex]; 
                     timeInformation.descriptorType = descriptorTypes[descriptorTypeIndex];
                     timeInformation.matcherType = matcherTypes[matcherTypeIndex];
                     timeInformation.selectorType = selectorTypes[matcherTypeIndex];
+                    );
                 }
             }
         }
