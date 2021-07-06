@@ -41,7 +41,11 @@ std::vector<TimeInformation> initializeTimeInformationVector(void) {
                 for (int selectorTypeIndex = 0; selectorTypeIndex < matcherType.size; selectorTypeIndex++ ) 
                 {
                     if (!isValidDescriptorDetectorCombo(descriptorType[descriptorTypeIndex], detectorType[detectorTypeIndex])) { continue; }
-                    info.push_back(TimeInformation(detectorType, descriptorType, matcherType, selectorType));
+                    info.push_back(
+                        TimeInformation(detectorType[detectorTypeIndex], 
+                                        descriptorType[descriptorTypeIndex], 
+                                        matcherType[matcherTypeIndex], 
+                                        selectorType[matcherTypeIndex]));
                 }
             }
         }
