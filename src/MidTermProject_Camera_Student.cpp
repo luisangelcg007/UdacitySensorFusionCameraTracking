@@ -24,37 +24,6 @@ bool isValidDescriptorDetectorCombo(const std::string descriptor, const std::str
             (descriptor.compare("ORB") == 0 && detector.compare("SIFT") == 0));
 }
 
-std::vector<TimeInformation> initializeTimeInformationVector(void) 
-{
-    const std::vector<std::string> detectorTypes = { "SHITOMASI", "HARRIS", "FAST", "BRISK", "ORB", "AKAZE", "SIFT" };
-    const std::vector<std::string> descriptorTypes = { "BRISK", "BRIEF", "ORB", "FREAK", "AKAZE", "SIFT" };
-    const std::vector<std::string> matcherTypes = { "MAT_BF" };
-    const std::vector<std::string> selectorTypes = { "SEL_KNN" };
-
-    std::vector<TimeInformation> info;
-
-    for (int detectorTypeIndex = 0; detectorTypeIndex < detectorTypes.size(); detectorTypeIndex++ )
-    {
-        for (int descriptorTypeIndex = 0; descriptorTypeIndex < descriptorTypes.size(); descriptorTypeIndex++ )
-        {
-            for (int matcherTypeIndex = 0; matcherTypeIndex < matcherTypes.size(); matcherTypeIndex++ )
-            {
-                for (int selectorTypeIndex = 0; selectorTypeIndex < matcherTypes.size(); selectorTypeIndex++ ) 
-                {
-                    if (!isValidDescriptorDetectorCombo(descriptorTypes[descriptorTypeIndex], detectorTypes[detectorTypeIndex])) { continue; }
-                    info.push_back(
-                        TimeInformation(detectorTypes[detectorTypeIndex], 
-                                        descriptorTypes[descriptorTypeIndex], 
-                                        matcherTypes[matcherTypeIndex], 
-                                        selectorTypes[matcherTypeIndex]));
-                }
-            }
-        }
-    }
-
-    return info;
-}
-
 void createCSVOutputFile(std::vector<TimeInformation> &timeInformation) 
 {
     constexpr char COMMA[]{ ", " };
@@ -123,11 +92,10 @@ int main(int argc, const char *argv[])
                 for (int selectorTypeIndex = 0; selectorTypeIndex < matcherTypes.size(); selectorTypeIndex++ ) 
                 {
                     if (!isValidDescriptorDetectorCombo(descriptorTypes[descriptorTypeIndex], detectorTypes[detectorTypeIndex])) { continue; }
-                    timeInformation.push_back(
-                        TimeInformation(detectorTypes[detectorTypeIndex], 
+                    timeInformation.push_back(detectorTypes[detectorTypeIndex], 
                                         descriptorTypes[descriptorTypeIndex], 
                                         matcherTypes[matcherTypeIndex], 
-                                        selectorTypes[matcherTypeIndex]));
+                                        selectorTypes[matcherTypeIndex]);
                 }
             }
         }
