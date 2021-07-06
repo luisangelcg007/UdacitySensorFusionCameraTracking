@@ -27,9 +27,13 @@ struct TimeInformation {
     // constructors
     TimeInformation() {}
 
-    TimeInformation(const std::string detectorType, const std::string descriptorType, const std::string matcherType, const std::string selectorType)
-        : detectorType(detectorType), descriptorType(descriptorType), matcherType(matcherType), selectorType(selectorType) 
-        {}
+    TimeInformation(std::string detectorType, std::string descriptorType, std::string matcherType, std::string selectorType)
+    {
+        detectorType = detectorType;
+        descriptorType = descriptorType;
+        matcherType = matcherType;
+        selectorType = selectorType;
+    }
 };
 
 struct CollectedData 

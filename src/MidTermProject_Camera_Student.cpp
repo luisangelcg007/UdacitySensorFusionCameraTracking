@@ -92,17 +92,11 @@ int main(int argc, const char *argv[])
                 for (int selectorTypeIndex = 0; selectorTypeIndex < matcherTypes.size(); selectorTypeIndex++ ) 
                 {
                     if (!isValidDescriptorDetectorCombo(descriptorTypes[descriptorTypeIndex], detectorTypes[detectorTypeIndex])) { continue; }
-                    /*timeInformation.push_back(
+                    timeInformation.push_back(
                         TimeInformation(detectorTypes[detectorTypeIndex], 
                                         descriptorTypes[descriptorTypeIndex], 
                                         matcherTypes[matcherTypeIndex], 
-                                        selectorTypes[matcherTypeIndex]));*/
-                    timeInformation.push_back(
-                    timeInformation.detectorType = detectorTypes[detectorTypeIndex]; 
-                    timeInformation.descriptorType = descriptorTypes[descriptorTypeIndex];
-                    timeInformation.matcherType = matcherTypes[matcherTypeIndex];
-                    timeInformation.selectorType = selectorTypes[matcherTypeIndex];
-                    );
+                                        selectorTypes[matcherTypeIndex]));
                 }
             }
         }
