@@ -26,10 +26,10 @@ bool isValidDescriptorDetectorCombo(const std::string descriptor, const std::str
 
 std::vector<TimeInformation> initializeTimeInformationVector(void) 
 {
-    const std::vector<std::string> detectorTypes{ "SHITOMASI", "HARRIS", "FAST", "BRISK", "ORB", "AKAZE", "SIFT" };
-    const std::vector<std::string> descriptorTypes{ "BRISK", "BRIEF", "ORB", "FREAK", "AKAZE", "SIFT" };
-    const std::vector<std::string> matcherTypes{ "MAT_BF" };
-    const std::vector<std::string> selectorTypes{ "SEL_KNN" };
+    const std::vector<std::string> detectorTypes = { "SHITOMASI", "HARRIS", "FAST", "BRISK", "ORB", "AKAZE", "SIFT" };
+    const std::vector<std::string> descriptorTypes = { "BRISK", "BRIEF", "ORB", "FREAK", "AKAZE", "SIFT" };
+    const std::vector<std::string> matcherTypes = { "MAT_BF" };
+    const std::vector<std::string> selectorTypes = { "SEL_KNN" };
 
     std::vector<TimeInformation> info;
 
@@ -105,10 +105,33 @@ void createCSVOutputFile(std::vector<TimeInformation> &timeInformation)
 /* MAIN PROGRAM */
 int main(int argc, const char *argv[])
 {
-
     /* INIT VARIABLES AND DATA STRUCTURES */
 
-     std::vector<TimeInformation> timeInformation = initializeTimeInformationVector() ;
+    const std::vector<std::string> detectorTypes = { "SHITOMASI", "HARRIS", "FAST", "BRISK", "ORB", "AKAZE", "SIFT" };
+    const std::vector<std::string> descriptorTypes = { "BRISK", "BRIEF", "ORB", "FREAK", "AKAZE", "SIFT" };
+    const std::vector<std::string> matcherTypes = { "MAT_BF" };
+    const std::vector<std::string> selectorTypes = { "SEL_KNN" };
+
+    std::vector<TimeInformation> timeInformation;
+
+    for (int detectorTypeIndex = 0; detectorTypeIndex < detectorTypes.size(); detectorTypeIndex++ )
+    {
+        for (int descriptorTypeIndex = 0; descriptorTypeIndex < descriptorTypes.size(); descriptorTypeIndex++ )
+        {
+            for (int matcherTypeIndex = 0; matcherTypeIndex < matcherTypes.size(); matcherTypeIndex++ )
+            {
+                for (int selectorTypeIndex = 0; selectorTypeIndex < matcherTypes.size(); selectorTypeIndex++ ) 
+                {
+                    if (!isValidDescriptorDetectorCombo(descriptorTypes[descriptorTypeIndex], detectorTypes[detectorTypeIndex])) { continue; }
+                    timeInformation.push_back(
+                        TimeInformation(detectorTypes[detectorTypeIndex], 
+                                        descriptorTypes[descriptorTypeIndex], 
+                                        matcherTypes[matcherTypeIndex], 
+                                        selectorTypes[matcherTypeIndex]));
+                }
+            }
+        }
+    }
 
     // data location
     string dataPath = "../";
