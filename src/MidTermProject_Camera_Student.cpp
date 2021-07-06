@@ -103,7 +103,7 @@ int main(int argc, const char *argv[])
                                         matcherTypes[matcherTypeIndex], 
                                         selectorTypes[matcherTypeIndex]));*/
                     timeInformation.push_back(
-                        TimeInformation(auxiliaryTimeInformation);
+                        auxiliaryTimeInformation);
                 }
             }
         }
