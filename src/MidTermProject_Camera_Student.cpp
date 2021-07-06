@@ -24,7 +24,8 @@ bool isValidDescriptorDetectorCombo(const std::string descriptor, const std::str
             (descriptor.compare("ORB") == 0 && detector.compare("SIFT") == 0));
 }
 
-std::vector<TimeInformation> initializeTimeInformationVector(void) {
+std::vector<TimeInformation> initializeTimeInformationVector(void) 
+{
     const std::vector<std::string> detectorTypes{ "SHITOMASI", "HARRIS", "FAST", "BRISK", "ORB", "AKAZE", "SIFT" };
     const std::vector<std::string> descriptorTypes{ "BRISK", "BRIEF", "ORB", "FREAK", "AKAZE", "SIFT" };
     const std::vector<std::string> matcherTypes{ "MAT_BF" };
@@ -32,13 +33,13 @@ std::vector<TimeInformation> initializeTimeInformationVector(void) {
 
     std::vector<TimeInformation> info;
 
-    for (int detectorTypeIndex = 0; detectorTypeIndex < detectorTypes.size; detectorTypeIndex++ )
+    for (int detectorTypeIndex = 0; detectorTypeIndex < detectorTypes.size(); detectorTypeIndex++ )
     {
-        for (int descriptorTypeIndex = 0; descriptorTypeIndex < descriptorType.size; descriptorTypeIndex++ )
+        for (int descriptorTypeIndex = 0; descriptorTypeIndex < descriptorType.size(); descriptorTypeIndex++ )
         {
-            for (int matcherTypeIndex = 0; matcherTypeIndex < matcherType.size; matcherTypeIndex++ )
+            for (int matcherTypeIndex = 0; matcherTypeIndex < matcherType.size(); matcherTypeIndex++ )
             {
-                for (int selectorTypeIndex = 0; selectorTypeIndex < matcherType.size; selectorTypeIndex++ ) 
+                for (int selectorTypeIndex = 0; selectorTypeIndex < matcherType.size(); selectorTypeIndex++ ) 
                 {
                     if (!isValidDescriptorDetectorCombo(descriptorType[descriptorTypeIndex], detectorType[detectorTypeIndex])) { continue; }
                     info.push_back(
