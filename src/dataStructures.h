@@ -15,7 +15,10 @@ struct DataFrame { // represents the available sensor information at the same ti
 };
 
 struct TimeInformation {
-    std::string detectorType, descriptorType, matcherType, selectorType;
+    std::string detectorType;
+    std::string descriptorType;
+    std::string matcherType;
+    std::string selectorType;
 
     std::array<int, 10> pointsPerFrame;
     std::array<int, 10> pointsLeftOnImage;
@@ -23,13 +26,6 @@ struct TimeInformation {
     std::array<double, 10> detectorElapsedTime;
     std::array<double, 10> descriptorElapsedTime;
     std::array<double, 10> matchElapsedTime;
-
-    // constructors
-    TimeInformation() {}
-
-    TimeInformation(std::string detectorType, std::string descriptorType, std::string matcherType, std::string selectorType)
-        : detectorType(detectorType), descriptorType(descriptorType), matcherType(matcherType), selectorType(selectorType) 
-        {}
 };
 
 struct CollectedData 

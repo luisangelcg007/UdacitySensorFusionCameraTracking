@@ -83,6 +83,7 @@ int main(int argc, const char *argv[])
 
     std::vector<TimeInformation> timeInformation;
     TimeInformation auxiliaryTimeInformation;
+    bool checkDetectorDescriptorCombination1
 
     for (int detectorTypeIndex = 0; detectorTypeIndex < detectorTypes.size(); detectorTypeIndex++ )
     {
@@ -97,11 +98,6 @@ int main(int argc, const char *argv[])
                     auxiliaryTimeInformation.descriptorType = descriptorTypes[descriptorTypeIndex];
                     auxiliaryTimeInformation.matcherType = matcherTypes[matcherTypeIndex];
                     auxiliaryTimeInformation.selectorType = selectorTypes[matcherTypeIndex];
-                    /*timeInformation.push_back(
-                        TimeInformation(detectorTypes[detectorTypeIndex], 
-                                        descriptorTypes[descriptorTypeIndex], 
-                                        matcherTypes[matcherTypeIndex], 
-                                        selectorTypes[matcherTypeIndex]));*/
                     timeInformation.push_back(
                         auxiliaryTimeInformation);
                 }
