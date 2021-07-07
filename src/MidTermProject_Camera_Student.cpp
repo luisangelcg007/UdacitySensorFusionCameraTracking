@@ -83,7 +83,8 @@ int main(int argc, const char *argv[])
 
     std::vector<TimeInformation> timeInformation;
     TimeInformation auxiliaryTimeInformation;
-    bool checkDetectorDescriptorCombination1
+    bool checkAkaseDetectorDescriptorCombination;
+    bool checkSiftDetectorOrbDescriptorCombination;
 
     for (int detectorTypeIndex = 0; detectorTypeIndex < detectorTypes.size(); detectorTypeIndex++ )
     {
@@ -93,7 +94,13 @@ int main(int argc, const char *argv[])
             {
                 for (int selectorTypeIndex = 0; selectorTypeIndex < matcherTypes.size(); selectorTypeIndex++ ) 
                 {
-                    if (!isValidDescriptorDetectorCombo(descriptorTypes[descriptorTypeIndex], detectorTypes[detectorTypeIndex])) { continue; }
+                    checkAkaseDetectorDescriptorCombination = (descriptor.compare("AKAZE") == 0 && detector.compare("AKAZE") != 0);
+                    checkSiftDetectorOrbDescriptorCombination = (descriptor.compare("ORB") == 0 && detector.compare("SIFT") == 0);
+    /*return !((descriptor.compare("AKAZE") == 0 && detector.compare("AKAZE") != 0) ||
+            (descriptor.compare("ORB") == 0 && detector.compare("SIFT") == 0));*/
+
+                    if ((checkAkaseDetectorDescriptorCombination || checkSiftDetectorOrbDescriptorCombination)) { continue; }
+
                     auxiliaryTimeInformation.detectorType = detectorTypes[detectorTypeIndex];
                     auxiliaryTimeInformation.descriptorType = descriptorTypes[descriptorTypeIndex];
                     auxiliaryTimeInformation.matcherType = matcherTypes[matcherTypeIndex];
