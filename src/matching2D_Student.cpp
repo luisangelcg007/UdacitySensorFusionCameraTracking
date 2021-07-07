@@ -88,13 +88,11 @@ CollectedData descKeypoints(vector<cv::KeyPoint> &keypoints, cv::Mat &img, cv::M
     cv::Ptr<cv::DescriptorExtractor> extractor;
     if (descriptorType.compare("BRISK") == 0)
     {
-
         int threshold = 30;        // FAST/AGAST detection threshold score.
         int octaves = 3;           // detection octaves (use 0 to do single scale)
         float patternScale = 1.0f; // apply this scale to the pattern used for sampling the neighbourhood of a keypoint.
 
         extractor = cv::BRISK::create(threshold, octaves, patternScale);
-
     } 
     else
     {
@@ -142,7 +140,7 @@ CollectedData descKeypoints(vector<cv::KeyPoint> &keypoints, cv::Mat &img, cv::M
     extractor->compute(img, keypoints, descriptors);
     t = ((double)cv::getTickCount() - t) / cv::getTickFrequency();
     cout << descriptorType << " descriptor extraction in " << 1000 * t / 1.0 << " ms" << endl;
-    
+
     collectedData.numKeyPoints = (int)keypoints.size();
     collectedData.elapsedTime = ((1000 * t) / 1.0);
     return collectedData ;
@@ -168,7 +166,6 @@ CollectedData detKeypointsShiTomasi(vector<cv::KeyPoint> &keypoints, cv::Mat &im
     // add corners to result vector
     for (auto it = corners.begin(); it != corners.end(); ++it)
     {
-
         cv::KeyPoint newKeyPoint;
         newKeyPoint.pt = cv::Point2f((*it).x, (*it).y);
         newKeyPoint.size = blockSize;
@@ -274,7 +271,6 @@ CollectedData detKeypointsModern(std::vector<cv::KeyPoint> &keypoints, cv::Mat &
         // TYPE_9_16, TYPE_7_12, TYPE_5_8
         cv::FastFeatureDetector::DetectorType type = cv::FastFeatureDetector::TYPE_9_16;
         detector = cv::FastFeatureDetector::create(30, true, type);
-
     }
     else 
     {
