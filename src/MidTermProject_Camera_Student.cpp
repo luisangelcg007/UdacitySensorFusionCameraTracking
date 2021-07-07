@@ -16,6 +16,10 @@
 #include "dataStructures.h"
 #include "matching2D.hpp"
 
+
+#include <sys/stat.h>
+#include <direct.h>
+
 using namespace std;
 
 bool DirectoryExists(const char *dirname)
