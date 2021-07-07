@@ -94,8 +94,16 @@ int main(int argc, const char *argv[])
             {
                 for (int selectorTypeIndex = 0; selectorTypeIndex < matcherTypes.size(); selectorTypeIndex++ ) 
                 {
-                    checkAkaseDetectorDescriptorCombination = (descriptor.compare("AKAZE") == 0 && detector.compare("AKAZE") != 0);
+                    /*checkAkaseDetectorDescriptorCombination = (descriptor.compare("AKAZE") == 0 && detector.compare("AKAZE") != 0);
                     checkSiftDetectorOrbDescriptorCombination = (descriptor.compare("ORB") == 0 && detector.compare("SIFT") == 0);
+    return !((descriptor.compare("AKAZE") == 0 && detector.compare("AKAZE") != 0) ||
+            (descriptor.compare("ORB") == 0 && detector.compare("SIFT") == 0));
+
+                    if (!(isValidDescriptorDetectorCombo(descriptorTypes[descriptorTypeIndex], detectorTypes[detectorTypeIndex]))) { continue; }*/
+
+
+                    checkAkaseDetectorDescriptorCombination = (descriptorTypes[descriptorTypeIndex].compare("AKAZE") == 0 && detectorTypes[detectorTypeIndex].compare("AKAZE") != 0);
+                    checkSiftDetectorOrbDescriptorCombination = (descriptorTypes[descriptorTypeIndex].compare("ORB") == 0 && detectorTypes[detectorTypeIndex].compare("SIFT") == 0);
     /*return !((descriptor.compare("AKAZE") == 0 && detector.compare("AKAZE") != 0) ||
             (descriptor.compare("ORB") == 0 && detector.compare("SIFT") == 0));*/
 
