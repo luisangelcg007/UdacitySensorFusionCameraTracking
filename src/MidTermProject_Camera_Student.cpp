@@ -18,15 +18,34 @@
 
 using namespace std;
 
+bool DirectoryExists(const char *dirname)
+{
+  struct stat info = {0};
+
+  int result = stat(dirname, &info);
+  if(result != 0)
+    return false;
+  
+  if ((info.st_mode & S_IFDIR) == S_IFDIR)
+    return true;
+
+  return false;
+}
+
 void createCSVOutputFile(std::vector<TimeInformation> &timeInformation) 
 {
+    if (!DirectoryExists("../Testreport"))
+    {
+        //LOG("\n**Directory %s didn't exist, creating it", dirname)
+        _mkdir("../Testreport");
+    }
+
     constexpr char COMMA[]{ ", " };
     constexpr char csvName[]{ "../report/LuisAngelCabralGuzmanProject.csv" };
 
-    std::cout << "Writing output file: " << csvName << std::endl;
     std::ofstream csvStream{ csvName };
 
-    csvStream << "Name: Luis Angel Cabral Guzman" << std::endl << "Date: 2021-07-05" << std::endl << std::endl;
+    csvStream << "Name: Luis Angel Cabral Guzman" << std::endl << "Date: 2021-07-06" << std::endl << std::endl;
 
     csvStream << "COMBINATION ID." << COMMA;
     csvStream << "IMAGE NO." << COMMA;
@@ -42,21 +61,21 @@ void createCSVOutputFile(std::vector<TimeInformation> &timeInformation)
 
     int indexID = 1;
 
-    for (auto &info : timeInformation) 
+    for (auto &timeInformation : timeInformation) 
     {
         
-        for (int index = 0; index < 10; index++) 
+        for (int index = 0; index < 10; index = index + 1) 
         {
             csvStream << indexID << COMMA;
             csvStream << index << COMMA;
-            csvStream << info.detectorType << COMMA;
-            csvStream << info.descriptorType << COMMA;
-            csvStream << info.pointsPerFrame.at(index) << COMMA;
-            csvStream << info.pointsLeftOnImage.at(index) << COMMA;
-            csvStream << info.detectorElapsedTime.at(index) << COMMA;
-            csvStream << info.descriptorElapsedTime.at(index) << COMMA;
-            csvStream << info.matchedPoints.at(index) << COMMA;
-            csvStream << info.matchElapsedTime.at(index) << std::endl;
+            csvStream << timeInformation.detectorType << COMMA;
+            csvStream << timeInformation.descriptorType << COMMA;
+            csvStream << timeInformation.pointsPerFrame.at(index) << COMMA;
+            csvStream << timeInformation.pointsLeftOnImage.at(index) << COMMA;
+            csvStream << timeInformation.detectorElapsedTime.at(index) << COMMA;
+            csvStream << timeInformation.descriptorElapsedTime.at(index) << COMMA;
+            csvStream << timeInformation.matchedPoints.at(index) << COMMA;
+            csvStream << timeInformation.matchElapsedTime.at(index) << std::endl;
         }
         indexID++;
         csvStream << std::endl;
@@ -69,16 +88,15 @@ void createCSVOutputFile(std::vector<TimeInformation> &timeInformation)
 int main(int argc, const char *argv[])
 {
     /* INIT VARIABLES AND DATA STRUCTURES */
-
-    const std::vector<std::string> detectorTypes = { "SHITOMASI", "HARRIS", "FAST", "BRISK", "ORB", "AKAZE", "SIFT" };
-    const std::vector<std::string> descriptorTypes = { "BRISK", "BRIEF", "ORB", "FREAK", "AKAZE", "SIFT" };
-    const std::vector<std::string> matcherTypes = { "MAT_BF" };
-    const std::vector<std::string> selectorTypes = { "SEL_KNN" };
-
+    
     std::vector<TimeInformation> timeInformation;
     TimeInformation auxiliaryTimeInformation;
     bool checkAkaseDetectorDescriptorCombination;
     bool checkSiftDetectorOrbDescriptorCombination;
+    const std::vector<std::string> detectorTypes = { "SHITOMASI", "HARRIS", "FAST", "BRISK", "ORB", "AKAZE", "SIFT" };
+    const std::vector<std::string> descriptorTypes = { "BRISK", "BRIEF", "ORB", "FREAK", "AKAZE", "SIFT" };
+    const std::vector<std::string> matcherTypes = { "MAT_BF" };
+    const std::vector<std::string> selectorTypes = { "SEL_KNN" };
 
     for (int detectorTypeIndex = 0; detectorTypeIndex < detectorTypes.size(); detectorTypeIndex++ )
     {
@@ -91,7 +109,10 @@ int main(int argc, const char *argv[])
                     checkAkaseDetectorDescriptorCombination = (descriptorTypes[descriptorTypeIndex].compare("AKAZE") == 0 && detectorTypes[detectorTypeIndex].compare("AKAZE") != 0);
                     checkSiftDetectorOrbDescriptorCombination = (descriptorTypes[descriptorTypeIndex].compare("ORB") == 0 && detectorTypes[detectorTypeIndex].compare("SIFT") == 0);
     
-                    if ((checkAkaseDetectorDescriptorCombination || checkSiftDetectorOrbDescriptorCombination)) { continue; }
+                    if ((checkAkaseDetectorDescriptorCombination || checkSiftDetectorOrbDescriptorCombination)) 
+                    { 
+                        continue; 
+                    }
 
                     auxiliaryTimeInformation.detectorType = detectorTypes[detectorTypeIndex];
                     auxiliaryTimeInformation.descriptorType = descriptorTypes[descriptorTypeIndex];
