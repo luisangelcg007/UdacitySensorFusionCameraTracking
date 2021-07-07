@@ -22,7 +22,7 @@ using namespace std;
 bool directoryExists(const char *dirname)
 {
     struct stat info = {0};
-    bool directoryStatus
+    bool directoryStatus;
 
     int result = stat(dirname, &info);
     if(result != 0)
