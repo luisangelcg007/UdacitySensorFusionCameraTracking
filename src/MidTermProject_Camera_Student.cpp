@@ -18,12 +18,6 @@
 
 using namespace std;
 
-bool isValidDescriptorDetectorCombo(const std::string descriptor, const std::string detector) 
-{
-    return !((descriptor.compare("AKAZE") == 0 && detector.compare("AKAZE") != 0) ||
-            (descriptor.compare("ORB") == 0 && detector.compare("SIFT") == 0));
-}
-
 void createCSVOutputFile(std::vector<TimeInformation> &timeInformation) 
 {
     constexpr char COMMA[]{ ", " };
@@ -94,27 +88,16 @@ int main(int argc, const char *argv[])
             {
                 for (int selectorTypeIndex = 0; selectorTypeIndex < matcherTypes.size(); selectorTypeIndex++ ) 
                 {
-                    /*checkAkaseDetectorDescriptorCombination = (descriptor.compare("AKAZE") == 0 && detector.compare("AKAZE") != 0);
-                    checkSiftDetectorOrbDescriptorCombination = (descriptor.compare("ORB") == 0 && detector.compare("SIFT") == 0);
-    return !((descriptor.compare("AKAZE") == 0 && detector.compare("AKAZE") != 0) ||
-            (descriptor.compare("ORB") == 0 && detector.compare("SIFT") == 0));
-
-                    if (!(isValidDescriptorDetectorCombo(descriptorTypes[descriptorTypeIndex], detectorTypes[detectorTypeIndex]))) { continue; }*/
-
-
                     checkAkaseDetectorDescriptorCombination = (descriptorTypes[descriptorTypeIndex].compare("AKAZE") == 0 && detectorTypes[detectorTypeIndex].compare("AKAZE") != 0);
                     checkSiftDetectorOrbDescriptorCombination = (descriptorTypes[descriptorTypeIndex].compare("ORB") == 0 && detectorTypes[detectorTypeIndex].compare("SIFT") == 0);
-    /*return !((descriptor.compare("AKAZE") == 0 && detector.compare("AKAZE") != 0) ||
-            (descriptor.compare("ORB") == 0 && detector.compare("SIFT") == 0));*/
-
+    
                     if ((checkAkaseDetectorDescriptorCombination || checkSiftDetectorOrbDescriptorCombination)) { continue; }
 
                     auxiliaryTimeInformation.detectorType = detectorTypes[detectorTypeIndex];
                     auxiliaryTimeInformation.descriptorType = descriptorTypes[descriptorTypeIndex];
                     auxiliaryTimeInformation.matcherType = matcherTypes[matcherTypeIndex];
                     auxiliaryTimeInformation.selectorType = selectorTypes[matcherTypeIndex];
-                    timeInformation.push_back(
-                        auxiliaryTimeInformation);
+                    timeInformation.push_back(auxiliaryTimeInformation);
                 }
             }
         }
