@@ -3,6 +3,9 @@
 
 using namespace std;
 
+static CollectedData collectedData;
+static double milliseconds;
+
 // Find best matches for keypoints in two camera images based on several matching methods
 CollectedData matchDescriptors( std::vector<cv::KeyPoint> &kPtsSource, 
                                 std::vector<cv::KeyPoint> &kPtsRef, 
@@ -17,7 +20,6 @@ CollectedData matchDescriptors( std::vector<cv::KeyPoint> &kPtsSource,
     cv::Ptr<cv::DescriptorMatcher> matcher;
     // configure matcher
     double t;
-    double milliseconds;
 
     if (matcherType.compare("MAT_BF") == 0)
     {
@@ -88,14 +90,14 @@ CollectedData matchDescriptors( std::vector<cv::KeyPoint> &kPtsSource,
     }
     
         std::cout << "Paso 5 " << std::endl;
-    milliseconds = ((1000 * t) / 1.0);
-    return CollectedData{ (int)(matches.size()), milliseconds };
+    collectedData.numKeyPoints = (int)matches.size();
+    collectedData.elapsedTime = ((1000 * t) / 1.0);
+    return collectedData ;
 }
 
 // Use one of several types of state-of-art descriptors to uniquely identify keypoints
 CollectedData descKeypoints(vector<cv::KeyPoint> &keypoints, cv::Mat &img, cv::Mat &descriptors, string descriptorType)
 {
-    double milliseconds;
     // select appropriate descriptor
     cv::Ptr<cv::DescriptorExtractor> extractor;
     if (descriptorType.compare("BRISK") == 0)
@@ -154,15 +156,14 @@ CollectedData descKeypoints(vector<cv::KeyPoint> &keypoints, cv::Mat &img, cv::M
     extractor->compute(img, keypoints, descriptors);
     t = ((double)cv::getTickCount() - t) / cv::getTickFrequency();
     cout << descriptorType << " descriptor extraction in " << 1000 * t / 1.0 << " ms" << endl;
-    milliseconds = ((1000 * t) / 1.0);
-    return CollectedData{ (int)(keypoints.size()), milliseconds };
+    collectedData.numKeyPoints = (int)keypoints.size();
+    collectedData.elapsedTime = ((1000 * t) / 1.0);
+    return collectedData ;
 }
 
 // Detect keypoints in image using the traditional Shi-Thomasi detector
 CollectedData detKeypointsShiTomasi(vector<cv::KeyPoint> &keypoints, cv::Mat &img, bool bVis)
 {
-    double milliseconds;
-
     // compute detector parameters based on image size
     int blockSize = 4;       //  size of an average block for computing a derivative covariation matrix over each pixel neighborhood
     double maxOverlap = 0.0; // max. permissible overlap between two features in %
@@ -200,8 +201,9 @@ CollectedData detKeypointsShiTomasi(vector<cv::KeyPoint> &keypoints, cv::Mat &im
         cv::waitKey(0);
     }
 
-    milliseconds = ((1000 * t) / 1.0);
-    return CollectedData{ (int)(keypoints.size()), milliseconds };
+    collectedData.numKeyPoints = (int)keypoints.size();
+    collectedData.elapsedTime = ((1000 * t) / 1.0);
+    return collectedData ;
 }
 
 CollectedData detKeypointsHarris(std::vector<cv::KeyPoint> &keypoints, cv::Mat &img, bool bVis)
@@ -215,7 +217,6 @@ CollectedData detKeypointsHarris(std::vector<cv::KeyPoint> &keypoints, cv::Mat &
     double k = 0.04;
     double overlapThreshold = 0.0;
     double t = (double)cv::getTickCount();
-    double milliseconds;
 
     cv::Mat dst = cv::Mat::zeros( img.size(), CV_32FC1 );
     cv::cornerHarris(img, dst, blockSize, apertureSize, k, cv::BORDER_DEFAULT);
@@ -270,14 +271,14 @@ CollectedData detKeypointsHarris(std::vector<cv::KeyPoint> &keypoints, cv::Mat &
         cv::waitKey(0);
     }
 
-    milliseconds = ((1000 * t) / 1.0);
-    return CollectedData{ (int)(keypoints.size()), milliseconds };
+    collectedData.numKeyPoints = (int)keypoints.size();
+    collectedData.elapsedTime = ((1000 * t) / 1.0);
+    return collectedData ;
 }
 
 CollectedData detKeypointsModern(std::vector<cv::KeyPoint> &keypoints, cv::Mat &img, std::string detectorType, bool bVis)
 {
     double t;
-    double milliseconds;
 
     cv::Ptr<cv::FeatureDetector> detector;
 
@@ -336,6 +337,7 @@ CollectedData detKeypointsModern(std::vector<cv::KeyPoint> &keypoints, cv::Mat &
         cv::waitKey(0);
     }
 
-    milliseconds = ((1000 * t) / 1.0);
-    return CollectedData{ (int)(keypoints.size()), milliseconds };
+    collectedData.numKeyPoints = (int)keypoints.size();
+    collectedData.elapsedTime = ((1000 * t) / 1.0);
+    return collectedData ;
 }
