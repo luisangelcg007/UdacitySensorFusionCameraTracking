@@ -61,21 +61,21 @@ void createCSVOutputFile(std::vector<TimeInformation> &timeInformation)
 
     int indexID = 1;
 
-    for (auto &timeInformation : timeInformation) 
+    for (auto &information : timeInformation) 
     {
         
         for (int index = 0; index < 10; index = index + 1) 
         {
             csvStream << indexID << COMMA;
             csvStream << index << COMMA;
-            csvStream << timeInformation.detectorType << COMMA;
-            csvStream << timeInformation.descriptorType << COMMA;
-            csvStream << timeInformation.pointsPerFrame.at(index) << COMMA;
-            csvStream << timeInformation.pointsLeftOnImage.at(index) << COMMA;
-            csvStream << timeInformation.detectorElapsedTime.at(index) << COMMA;
-            csvStream << timeInformation.descriptorElapsedTime.at(index) << COMMA;
-            csvStream << timeInformation.matchedPoints.at(index) << COMMA;
-            csvStream << timeInformation.matchElapsedTime.at(index) << std::endl;
+            csvStream << information.detectorType << COMMA;
+            csvStream << information.descriptorType << COMMA;
+            csvStream << information.pointsPerFrame.at(index) << COMMA;
+            csvStream << information.pointsLeftOnImage.at(index) << COMMA;
+            csvStream << information.detectorElapsedTime.at(index) << COMMA;
+            csvStream << information.descriptorElapsedTime.at(index) << COMMA;
+            csvStream << information.matchedPoints.at(index) << COMMA;
+            csvStream << information.matchElapsedTime.at(index) << std::endl;
         }
         indexID++;
         csvStream << std::endl;
