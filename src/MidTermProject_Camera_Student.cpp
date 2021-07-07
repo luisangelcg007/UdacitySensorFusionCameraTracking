@@ -15,33 +15,31 @@
 
 #include "dataStructures.h"
 #include "matching2D.hpp"
-
-
 #include <sys/stat.h>
-#include <direct.h>
 
 using namespace std;
 
-bool DirectoryExists(const char *dirname)
+bool directoryExists(const char *dirname)
 {
-  struct stat info = {0};
+    struct stat info = {0};
+    bool directoryStatus
 
-  int result = stat(dirname, &info);
-  if(result != 0)
-    return false;
-  
-  if ((info.st_mode & S_IFDIR) == S_IFDIR)
-    return true;
+    int result = stat(dirname, &info);
+    if(result != 0)
+        directoryStatus = false;
+    
+    if ((info.st_mode & S_IFDIR) == S_IFDIR)
+        directoryStatus = true;
 
-  return false;
+    return directoryStatus;
 }
 
 void createCSVOutputFile(std::vector<TimeInformation> &timeInformation) 
 {
-    if (!DirectoryExists("../Testreport"))
+    if (!directoryExists("../report"))
     {
         //LOG("\n**Directory %s didn't exist, creating it", dirname)
-        _mkdir("../Testreport");
+        mkdir("../report",0777);
     }
 
     constexpr char COMMA[]{ ", " };
@@ -52,7 +50,7 @@ void createCSVOutputFile(std::vector<TimeInformation> &timeInformation)
     csvStream << "Name: Luis Angel Cabral Guzman" << std::endl << "Date: 2021-07-06" << std::endl << std::endl;
 
     csvStream << "COMBINATION ID." << COMMA;
-    csvStream << "IMAGE NO." << COMMA;
+    csvStream << "IMAGE NUMBER." << COMMA;
     csvStream << "DETECTOR TYPE" << COMMA;
     csvStream << "DESCRIPTOR TYPE" << COMMA;
     csvStream << "TOTAL KEYPOINTS" << COMMA;
