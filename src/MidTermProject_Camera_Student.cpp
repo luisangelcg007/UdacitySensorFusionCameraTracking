@@ -61,26 +61,6 @@ void createCSVOutputFile(std::vector<TimeInformation> &timeInformation)
     csvStream << std::endl;
 
     int indexID = 1;
-    /*
-    for (auto &information : timeInformation)
-    {
-        for (int index = 0; index < 10; index = index + 1) 
-        {
-            csvStream << indexID << COMMA;
-            csvStream << index << COMMA;
-            csvStream << information.detectorType << COMMA;
-            csvStream << information.descriptorType << COMMA;
-            csvStream << information.pointsPerFrame.at(index) << COMMA;
-            csvStream << information.pointsLeftOnImage.at(index) << COMMA;
-            csvStream << information.detectorElapsedTime.at(index) << COMMA;
-            csvStream << information.descriptorElapsedTime.at(index) << COMMA;
-            csvStream << information.matchedPoints.at(index) << COMMA;
-            csvStream << information.matchElapsedTime.at(index) << std::endl;
-        }
-        indexID++;
-        csvStream << std::endl;
-    }
-    */
     for (int timeInformationIndex = 0; timeInformationIndex < timeInformation.size(); timeInformationIndex++ )
     {
         for (int index = 0; index < 10; index = index + 1) 
@@ -161,7 +141,8 @@ int main(int argc, const char *argv[])
 
     /* MAIN LOOP OVER ALL IMAGES */
 
-    for (auto &info : timeInformation) 
+    //for (auto &info : timeInformation)
+    for (int timeInformationIndex = 0; timeInformationIndex < timeInformation.size(); timeInformationIndex++ )
     {
         dataBuffer.clear();
 
@@ -170,10 +151,10 @@ int main(int argc, const char *argv[])
             /* LOAD IMAGE INTO BUFFER */
             CollectedData collectedData;
 
-            std::cout << "Detector type:= " << info.detectorType << std::endl;
-            std::cout << "Descriptor type:= " << info.descriptorType << std::endl;
-            std::cout << "Matcher type:= " << info.matcherType << std::endl;
-            std::cout << "Selector type:= " << info.selectorType << std::endl;
+            std::cout << "Detector type:= " << timeInformation[timeInformationIndex].detectorType << std::endl;
+            std::cout << "Descriptor type:= " << timeInformation[timeInformationIndex].descriptorType << std::endl;
+            std::cout << "Matcher type:= " << timeInformation[timeInformationIndex].matcherType << std::endl;
+            std::cout << "Selector type:= " << timeInformation[timeInformationIndex].selectorType << std::endl;
             std::cout << std::endl;
 
             // assemble filenames for current index
@@ -213,21 +194,21 @@ int main(int argc, const char *argv[])
             //// TASK MP.2 -> add the following keypoint detectors in file matching2D.cpp and enable string-based selection based on detectorType
             //// -> HARRIS, FAST, BRISK, ORB, AKAZE, SIFT
 
-            if (info.detectorType.compare("SHITOMASI") == 0)
+            if (timeInformation[timeInformationIndex].detectorType.compare("SHITOMASI") == 0)
             {
                 collectedData = detKeypointsShiTomasi(keypoints, imgGray, false);
             }
-            else  if (info.detectorType.compare("HARRIS") == 0) 
+            else  if (timeInformation[timeInformationIndex].detectorType.compare("HARRIS") == 0) 
             {
                 collectedData = detKeypointsHarris(keypoints, imgGray, false);
 
             } else 
             {
-                collectedData = detKeypointsModern(keypoints, imgGray, info.detectorType, false);
+                collectedData = detKeypointsModern(keypoints, imgGray, timeInformation[timeInformationIndex].detectorType, false);
             }
 
-            info.pointsPerFrame.at(imgIndex) = collectedData.numKeyPoints;
-            info.detectorElapsedTime.at(imgIndex) = collectedData.elapsedTime;
+            timeInformation[timeInformationIndex].pointsPerFrame.at(imgIndex) = collectedData.numKeyPoints;
+            timeInformation[timeInformationIndex].detectorElapsedTime.at(imgIndex) = collectedData.elapsedTime;
             //// EOF STUDENT ASSIGNMENT
 
             //// STUDENT ASSIGNMENT
@@ -250,7 +231,7 @@ int main(int argc, const char *argv[])
 
                 keypoints = retainedPoints;
 
-                info.pointsLeftOnImage.at(imgIndex) = keypoints.size();
+                timeInformation[timeInformationIndex].pointsLeftOnImage.at(imgIndex) = keypoints.size();
                 std::cout << std::endl;
             }
 
@@ -262,7 +243,7 @@ int main(int argc, const char *argv[])
             {
                 int maxKeypoints = 50;
 
-                if (info.detectorType.compare("SHITOMASI") == 0)
+                if (timeInformation[timeInformationIndex].detectorType.compare("SHITOMASI") == 0)
                 { // there is no response info, so keep the first 50 as they are sorted in descending quality order
                     keypoints.erase(keypoints.begin() + maxKeypoints, keypoints.end());
                 }
@@ -285,9 +266,9 @@ int main(int argc, const char *argv[])
             collectedData = descKeypoints((dataBuffer.end() - 1)->keypoints, 
                                           (dataBuffer.end() - 1)->cameraImg, 
                                            descriptors, 
-                                           info.descriptorType);
+                                           timeInformation[timeInformationIndex].descriptorType);
 
-            info.descriptorElapsedTime.at(imgIndex) = collectedData.elapsedTime;
+            timeInformation[timeInformationIndex].descriptorElapsedTime.at(imgIndex) = collectedData.elapsedTime;
             //// EOF STUDENT ASSIGNMENT
 
             // push descriptors for current frame to end of data buffer
@@ -300,9 +281,9 @@ int main(int argc, const char *argv[])
                 /* MATCH KEYPOINT DESCRIPTORS */
 
                 vector<cv::DMatch> matches;
-                const std::string descriptorFamily{ (info.descriptorType.compare("SIFT") == 0) ? "DES_HOG" : "DES_BINARY" };
+                const std::string descriptorFamily{ (timeInformation[timeInformationIndex].descriptorType.compare("SIFT") == 0) ? "DES_HOG" : "DES_BINARY" };
                 std::cout << "descriptorFamily = " << descriptorFamily << std::endl;
-                std::cout << "descriptorType = " << info.descriptorType << std::endl;
+                std::cout << "descriptorType = " << timeInformation[timeInformationIndex].descriptorType << std::endl;
                 // string matcherType = "MAT_BF";        // MAT_BF, MAT_FLANN
                 // string descriptorType = "DES_BINARY"; // DES_BINARY, DES_HOG
                 // string selectorType = "SEL_NN";       // SEL_NN, SEL_KNN
@@ -317,11 +298,11 @@ int main(int argc, const char *argv[])
                                                 (dataBuffer.end() - 1)->descriptors,
                                                 matches, 
                                                 descriptorFamily, 
-                                                info.matcherType, 
-                                                info.selectorType);
+                                                timeInformation[timeInformationIndex].matcherType, 
+                                                timeInformation[timeInformationIndex].selectorType);
 
-                info.matchedPoints.at(imgIndex) = collectedData.numKeyPoints;
-                info.matchElapsedTime.at(imgIndex) = collectedData.elapsedTime;
+                timeInformation[timeInformationIndex].matchedPoints.at(imgIndex) = collectedData.numKeyPoints;
+                timeInformation[timeInformationIndex].matchElapsedTime.at(imgIndex) = collectedData.elapsedTime;
 
                 //// EOF STUDENT ASSIGNMENT
 
@@ -351,7 +332,7 @@ int main(int argc, const char *argv[])
             }
             else 
             {
-                info.matchedPoints.at(imgIndex) = info.matchElapsedTime.at(imgIndex) = 0;
+                timeInformation[timeInformationIndex].matchedPoints.at(imgIndex) = timeInformation[timeInformationIndex].matchElapsedTime.at(imgIndex) = 0;
             }
 
         } // eof loop over all images
