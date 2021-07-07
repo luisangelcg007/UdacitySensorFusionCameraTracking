@@ -38,7 +38,6 @@ void createCSVOutputFile(std::vector<TimeInformation> &timeInformation)
 {
     if (!directoryExists("../report"))
     {
-        //LOG("\n**Directory %s didn't exist, creating it", dirname)
         mkdir("../report",0777);
     }
 
@@ -62,10 +61,9 @@ void createCSVOutputFile(std::vector<TimeInformation> &timeInformation)
     csvStream << std::endl;
 
     int indexID = 1;
-
-    for (auto &information : timeInformation) 
+    /*
+    for (auto &information : timeInformation)
     {
-        
         for (int index = 0; index < 10; index = index + 1) 
         {
             csvStream << indexID << COMMA;
@@ -78,6 +76,25 @@ void createCSVOutputFile(std::vector<TimeInformation> &timeInformation)
             csvStream << information.descriptorElapsedTime.at(index) << COMMA;
             csvStream << information.matchedPoints.at(index) << COMMA;
             csvStream << information.matchElapsedTime.at(index) << std::endl;
+        }
+        indexID++;
+        csvStream << std::endl;
+    }
+    */
+    for (int timeInformationIndex = 0; timeInformationIndex < timeInformation.size(); timeInformationIndex++ )
+    {
+        for (int index = 0; index < 10; index = index + 1) 
+        {
+            csvStream << indexID << COMMA;
+            csvStream << index << COMMA;
+            csvStream << timeInformation[timeInformationIndex].detectorType << COMMA;
+            csvStream << timeInformation[timeInformationIndex].descriptorType << COMMA;
+            csvStream << timeInformation[timeInformationIndex].pointsPerFrame.at(index) << COMMA;
+            csvStream << timeInformation[timeInformationIndex].pointsLeftOnImage.at(index) << COMMA;
+            csvStream << timeInformation[timeInformationIndex].detectorElapsedTime.at(index) << COMMA;
+            csvStream << timeInformation[timeInformationIndex].descriptorElapsedTime.at(index) << COMMA;
+            csvStream << timeInformation[timeInformationIndex].matchedPoints.at(index) << COMMA;
+            csvStream << timeInformation[timeInformationIndex].matchElapsedTime.at(index) << std::endl;
         }
         indexID++;
         csvStream << std::endl;
