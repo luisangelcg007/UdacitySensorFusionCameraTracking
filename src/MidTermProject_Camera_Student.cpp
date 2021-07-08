@@ -216,20 +216,20 @@ int main(int argc, const char *argv[])
 
             // only keep keypoints on the preceding vehicle
             bool bFocusOnVehicle = true;
-            cv::Rect vehicleRect(535, 180, 180, 150);
+            cv::Rect vehicleBox(535, 180, 180, 150);
             if (bFocusOnVehicle)
             {
-                std::vector<cv::KeyPoint> retainedPoints;
+                std::vector<cv::KeyPoint> keypointsInVehicleBox;
 
                 for (auto point : keypoints) 
                 {
-                    if (vehicleRect.contains(cv::Point2f(point.pt))) 
+                    if (vehicleBox.contains(cv::Point2f(point.pt))) 
                     {
-                        retainedPoints.push_back(point); 
+                        keypointsInVehicleBox.push_back(point); 
                     }
                 }
 
-                keypoints = retainedPoints;
+                keypoints = keypointsInVehicleBox;
 
                 timeInformation[timeInformationIndex].pointsLeftOnImage.at(imgIndex) = keypoints.size();
                 std::cout << std::endl;

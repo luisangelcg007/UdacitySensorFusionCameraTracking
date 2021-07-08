@@ -60,16 +60,16 @@ CollectedData matchDescriptors( std::vector<cv::KeyPoint> &kPtsSource,
     }
     else if (selectorType.compare("SEL_KNN") == 0)
     { // k nearest neighbors (k=2)
-        std::vector<std::vector<cv::DMatch>> knnMatches;
+        std::vector<std::vector<cv::DMatch>> kNearestNeighborMatches;
         t = static_cast<double>(cv::getTickCount());
-        matcher->knnMatch(descSource, descRef, knnMatches, 2);
-        constexpr float threshold{ 0.8 };
+        
+        matcher->knnMatch(descSource, descRef, kNearestNeighborMatches, 2);
 
-        for (auto iterator{ std::begin(knnMatches) }; iterator != std::end(knnMatches); iterator++) 
+        for (auto index{ std::begin(kNearestNeighborMatches) }; index != std::end(kNearestNeighborMatches); index = index+1) 
         {
-            if ((*iterator).at(0).distance < (threshold * (*iterator).at(1).distance)) 
+            if ((*index).at(0).distance < (0.8 * (*index).at(1).distance)) 
             {
-                matches.push_back((*iterator).at(0));
+                matches.push_back((*index).at(0));
             }
         }
 
